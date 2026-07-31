@@ -1,3 +1,4 @@
+const reviewRoutes = require('./src/routes/review.routes');
 const healthRoutes = require('./src/routes/health.routes');
 const express = require("express");
 const dotenv = require("dotenv");
@@ -73,3 +74,5 @@ if (require.main === module) {
 
 module.exports = app;
 
+
+app.use('/api/reviews', reviewRoutes);
