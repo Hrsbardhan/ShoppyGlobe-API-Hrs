@@ -1,3 +1,4 @@
+const categoryRoutes = require('./src/routes/category.routes');
 const reviewRoutes = require('./src/routes/review.routes');
 const healthRoutes = require('./src/routes/health.routes');
 const express = require("express");
@@ -76,3 +77,5 @@ module.exports = app;
 
 
 app.use('/api/reviews', reviewRoutes);
+
+app.use('/api/categories', categoryRoutes);
