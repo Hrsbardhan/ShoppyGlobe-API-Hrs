@@ -1,5 +1,6 @@
-﻿const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 const User = require("../models/User");
 
 const generateToken = (id) => {
@@ -12,33 +13,31 @@ const generateToken = (id) => {
     );
 };
 
-const register = async (req, res) => {
-
+exports.register = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
 
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-
+        if (!errors.isEmpty()) {
             return res.status(400).json({
                 success: false,
-                message: "All fields are required"
+                message: "Validation failed",
+                data: errors.array()
             });
-
         }
+
+        const { name, email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-
-            return res.status(400).json({
+            return res.status(409).json({
                 success: false,
-                message: "User already exists"
+                message: "User already exists",
+                data: null
             });
-
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = await User.create({
             name,
@@ -46,79 +45,72 @@ const register = async (req, res) => {
             password: hashedPassword
         });
 
-        return res.status(201).json({
+        res.status(201).json({
             success: true,
             message: "User registered successfully",
-            token: generateToken(user._id),
             data: {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                token: generateToken(user._id)
             }
         });
 
     } catch (error) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+        next(error);
     }
-
 };
 
-const login = async (req, res) => {
 
+exports.login = async (req, res, next) => {
     try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                data: errors.array()
+            });
+        }
 
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email }).select("+password");
+        const user = await User.findOne({ email });
 
         if (!user) {
-
             return res.status(401).json({
                 success: false,
-                message: "Invalid credentials"
+                message: "Invalid credentials",
+                data: null
             });
-
         }
 
-        const matched = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
 
-        if (!matched) {
-
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid credentials"
+                message: "Invalid credentials",
+                data: null
             });
-
         }
 
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             message: "Login successful",
-            token: generateToken(user._id),
             data: {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                token: generateToken(user._id)
             }
         });
 
     } catch (error) {
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+        next(error);
     }
-
-};
-
-module.exports = {
-    register,
-    login
 };

@@ -1,54 +1,49 @@
-﻿const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const protect = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
 
     try {
 
-        let token = null;
+        const header = req.headers.authorization;
 
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith("Bearer ")
-        ) {
-            token = req.headers.authorization.split(" ")[1];
-        }
-
-        if (!token) {
-
+        if (!header || !header.startsWith("Bearer")) {
             return res.status(401).json({
                 success: false,
-                message: "Access denied. Token missing."
+                message: "Authorization token required",
+                data: null
             });
-
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const token = header.split(" ")[1];
 
-        const user = await User.findById(decoded.id).select("-password");
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
 
-        if (!user) {
+        req.user = await User.findById(decoded.id)
+            .select("-password");
 
+        if (!req.user) {
             return res.status(401).json({
                 success: false,
-                message: "User not found."
+                message: "User not found",
+                data: null
             });
-
         }
-
-        req.user = user;
 
         next();
 
     } catch (error) {
 
-        return res.status(401).json({
+        res.status(401).json({
             success: false,
-            message: "Invalid or expired token."
+            message: "Invalid token",
+            data: null
         });
 
     }
-
 };
 
-module.exports = protect;
+module.exports = authMiddleware;
