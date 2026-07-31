@@ -1,3 +1,5 @@
+const runtimeSetup = require('./src/utils/runtimeSetup');
+const optimizeModels = require('./src/config/syncIndexes');
 const generateHealthReport = require('./src/utils/healthReport');
 const validateProjectStructure = require('./src/utils/projectValidator');
 const addIndexes = require('./src/config/databaseIndexes');
@@ -36,11 +38,13 @@ const orderRoutes = require("./src/routes/order.routes");
 
 
 productionCheck();
+runtimeSetup();
 validateProjectStructure();
 generateHealthReport();
 
 connectDatabase();
 addIndexes();
+optimizeModels();
 
 const app = express();
 
@@ -99,6 +103,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
+
 
 
 
