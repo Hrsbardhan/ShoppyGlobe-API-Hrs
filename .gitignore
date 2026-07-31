@@ -1,20 +1,14 @@
-# Node
 node_modules/
 
-# Environment
 .env
-.env.production
+.env.*
 
-# Logs
+!.env.example
+
 logs/
-*.log
-
-# Coverage
 coverage/
 
-# Testing
-.nyc_output/
+*.log
 
-# OS
 .DS_Store
 Thumbs.db

@@ -7,7 +7,7 @@ const categoryRoutes = require('./src/routes/category.routes');
 const reviewRoutes = require('./src/routes/review.routes');
 const healthRoutes = require('./src/routes/health.routes');
 const express = require("express");
-const dotenv = require("dotenv");
+const env = require("./src/config/env");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -29,7 +29,7 @@ const cartRoutes = require("./src/routes/cart.routes");
 const userRoutes = require("./src/routes/user.routes");
 const orderRoutes = require("./src/routes/order.routes");
 
-dotenv.config();
+
 
 productionCheck();
 
@@ -91,6 +91,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 

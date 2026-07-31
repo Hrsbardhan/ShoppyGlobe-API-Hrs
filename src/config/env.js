@@ -1,19 +1,6 @@
-﻿const required = [
-    "PORT",
-    "MONGO_URI",
-    "JWT_SECRET"
-];
-
-required.forEach((key) => {
-
-    if (!process.env[key]) {
-
-        console.error(`Missing environment variable: ${key}`);
-
-        process.exit(1);
-
-    }
-
+require("dotenv-safe").config({
+    allowEmptyValues: false
 });
 
-module.exports = true;
+
+module.exports = process.env;
