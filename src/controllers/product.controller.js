@@ -1,120 +1,163 @@
+const asyncHandler = require("../utils/asyncHandler");
 const Product = require("../models/Product");
+const validateObjectId = require("../utils/validateObjectId");
 
-exports.getProducts = async (req, res, next) => {
-    try {
-        const {
-            page = 1,
-            limit = 10,
-            search,
-            category,
-            sort
-        } = req.query;
 
-        const filter = {};
+exports.getProducts = asyncHandler(async (req, res) => {
 
-        if (search) {
-            filter.$or = [
-                {
-                    title: {
-                        $regex: search,
-                        $options: "i"
-                    }
-                },
-                {
-                    description: {
-                        $regex: search,
-                        $options: "i"
-                    }
+    const {
+        page = 1,
+        limit = 10,
+        search,
+        category,
+        sort
+    } = req.query;
+
+
+    const filter = {};
+
+
+    if (search) {
+
+        filter.$or = [
+
+            {
+                title: {
+                    $regex: search,
+                    $options: "i"
                 }
-            ];
-        }
+            },
 
-        if (category) {
-            filter.category = category.toLowerCase();
-        }
-
-        let query = Product.find(filter);
-
-        if (sort === "price_asc") {
-            query = query.sort({
-                price: 1
-            });
-        }
-
-        if (sort === "price_desc") {
-            query = query.sort({
-                price: -1
-            });
-        }
-
-        const pageNumber = Number(page);
-        const limitNumber = Number(limit);
-
-        const products = await query
-            .skip((pageNumber - 1) * limitNumber)
-            .limit(limitNumber);
-
-        const total = await Product.countDocuments(filter);
-
-        res.status(200).json({
-            success: true,
-            message: "Products fetched successfully",
-            data: {
-                products,
-                pagination: {
-                    total,
-                    page: pageNumber,
-                    limit: limitNumber,
-                    totalPages: Math.ceil(
-                        total / limitNumber
-                    )
+            {
+                description: {
+                    $regex: search,
+                    $options: "i"
                 }
             }
+
+        ];
+    }
+
+
+    if (category) {
+
+        filter.category = category.toLowerCase();
+
+    }
+
+
+    let query = Product.find(filter);
+
+
+    if (sort === "price_asc") {
+
+        query = query.sort({
+            price: 1
         });
 
-    } catch (error) {
-        next(error);
     }
-};
 
 
-exports.getProductById = async (req, res, next) => {
-    try {
-        const product = await Product.findById(
-            req.params.id
-        );
+    if (sort === "price_desc") {
 
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "Product not found",
-                data: null
-            });
+        query = query.sort({
+            price: -1
+        });
+
+    }
+
+
+    const pageNumber = Number(page);
+    const limitNumber = Number(limit);
+
+
+    const products = await query
+        .skip(
+            (pageNumber - 1) * limitNumber
+        )
+        .limit(limitNumber);
+
+
+    const total =
+        await Product.countDocuments(filter);
+
+
+    res.status(200).json({
+
+        success: true,
+
+        message: "Products fetched successfully",
+
+        data: {
+
+            products,
+
+            pagination: {
+
+                total,
+
+                page: pageNumber,
+
+                limit: limitNumber,
+
+                totalPages:
+                    Math.ceil(
+                        total / limitNumber
+                    )
+
+            }
+
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Product fetched successfully",
-            data: product
+    });
+
+});
+
+
+exports.getProductById = asyncHandler(async (req, res) => {
+
+    if (!validateObjectId(req.params.id)) {
+
+        return res.status(400).json({
+
+            success: false,
+
+            message: "Invalid product id",
+
+            data: null
+
         });
 
-    } catch (error) {
-        next(error);
     }
-};
 
 
-exports.createProduct = async (req, res, next) => {
-    try {
-        const product = await Product.create(req.body);
+    const product =
+        await Product.findById(req.params.id);
 
-        res.status(201).json({
-            success: true,
-            message: "Product created successfully",
-            data: product
+
+    if (!product) {
+
+        return res.status(404).json({
+
+            success: false,
+
+            message: "Product not found",
+
+            data: null
+
         });
 
-    } catch (error) {
-        next(error);
     }
-};
+
+
+    res.status(200).json({
+
+        success: true,
+
+        message: "Product fetched successfully",
+
+        data: product
+
+    });
+
+});
