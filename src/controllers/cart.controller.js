@@ -22,3 +22,28 @@ exports.getCart = asyncHandler(async (req, res) => {
     });
 
 });
+
+exports.addToCart = asyncHandler(async (req, res) => {
+    res.status(201).json({
+        success: true,
+        message: "Item added to cart",
+        data: {}
+    });
+});
+
+exports.updateCartItem = asyncHandler(async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Cart updated",
+        data: {}
+    });
+});
+
+exports.removeCartItem = asyncHandler(async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Item removed from cart",
+        data: {}
+    });
+});
+

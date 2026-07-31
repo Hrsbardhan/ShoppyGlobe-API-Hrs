@@ -8,10 +8,17 @@ const errorMiddleware = (
     next
 ) => {
 
-    console.error("===== ERROR =====");
-console.error(err);
-console.error(err.stack);
-console.error("=================");
+    logger.error({
+
+        message: err.message,
+
+        stack: err.stack,
+
+        path: req.originalUrl,
+
+        method: req.method
+
+    });
 
 
     res.status(
@@ -36,4 +43,3 @@ console.error("=================");
 
 
 module.exports = errorMiddleware;
-

@@ -1,0 +1,15 @@
+{
+    "project": "ShoppyGlobe API",
+    "generatedAt": "2026-07-31T17:31:22.206Z",
+    "status": "production-ready",
+    "modules": [
+        "Authentication",
+        "Products",
+        "Cart",
+        "Orders",
+        "Admin",
+        "Inventory",
+        "Reviews",
+        "Categories"
+    ]
+}

@@ -56,19 +56,15 @@ if (process.env.NODE_ENV !== "test") {
 
 const app = express();
 
-app.get("/debug", (req, res) => {
-    res.json({ ok: true });
-});
 app.use(securityHeaders);
 app.use(cors({ origin: allowedOrigins() }));
 app.use(express.json());
-app.use(apiLimiter);
 app.use(morgan("dev"));
 app.use(requestLogger);
 
-// app.use(rateLimiter);
-// app.use(sanitizeMiddleware);
-// app.use(hppMiddleware);
+app.use(rateLimiter);
+app.use(sanitizeMiddleware);
+app.use(hppMiddleware);
 
 app.use("/api/health", healthRoutes);
 
@@ -119,7 +115,6 @@ if (require.main === module) {
 }
 
 module.exports = app;
-
 
 
 
