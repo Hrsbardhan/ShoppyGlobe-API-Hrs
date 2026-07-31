@@ -1,3 +1,5 @@
+require('./src/utils/gracefulShutdown');
+const productionCheck = require('./src/utils/productionCheck');
 const adminOrderRoutes = require('./src/routes/admin.order.routes');
 const inventoryRoutes = require('./src/routes/inventory.routes');
 const adminRoutes = require('./src/routes/admin.routes');
@@ -28,6 +30,8 @@ const userRoutes = require("./src/routes/user.routes");
 const orderRoutes = require("./src/routes/order.routes");
 
 dotenv.config();
+
+productionCheck();
 
 connectDatabase();
 
@@ -87,4 +91,6 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
+
 
