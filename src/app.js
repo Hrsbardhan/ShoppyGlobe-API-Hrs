@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -25,4 +25,10 @@ app.get("/health", (req, res) => {
     });
 });
 
+
+const productRoutes = require("./routes/product.routes");
+
+app.use("/products", productRoutes);
+
 module.exports = app;
+
