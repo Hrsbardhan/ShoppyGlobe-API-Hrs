@@ -1,4 +1,5 @@
 const request = require("supertest");
+
 const app = require("../server");
 
 describe("Health API", () => {
@@ -10,6 +11,9 @@ describe("Health API", () => {
 
         expect(response.statusCode)
             .toBe(200);
+
+        expect(response.body.success)
+            .toBe(true);
 
     });
 
