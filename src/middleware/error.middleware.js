@@ -1,14 +1,22 @@
-﻿const errorHandler = (err, req, res, next) => {
+const errorMiddleware = (err, req, res, next) => {
 
-    console.error(err);
+    console.error(err.stack);
 
-    const statusCode = err.statusCode || 500;
+    res.status(
+        err.statusCode || 500
+    ).json({
 
-    res.status(statusCode).json({
         success: false,
-        message: err.message || "Internal Server Error"
+
+        message:
+            err.message ||
+            "Internal server error",
+
+        data: null
+
     });
 
 };
 
-module.exports = errorHandler;
+
+module.exports = errorMiddleware;
