@@ -8,7 +8,7 @@ const authMiddleware =
     require("../middleware/auth.middleware");
 
 
-const {
+const { profileValidator } = require("../middleware/user.validation.middleware");`n`nconst {
     getProfile,
     updateProfile
 } =
@@ -41,3 +41,4 @@ router.put(
 
 
 module.exports = router;
+
