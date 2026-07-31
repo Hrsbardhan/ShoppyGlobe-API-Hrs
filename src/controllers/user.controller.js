@@ -1,80 +1,121 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
+
 
 exports.getProfile = async (req, res, next) => {
+
     try {
-        const user = await User.findById(req.user.id)
-            .select("-password");
+
+
+        const user =
+            await User.findById(req.user.id)
+                .select("-password");
+
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "User not found",
+
+                data:
+                    null
+
+            });
+
+        }
+
 
         res.status(200).json({
+
             success: true,
-            message: "Profile fetched successfully",
-            data: user
+
+            message:
+                "Profile fetched successfully",
+
+            data:
+                user
+
         });
 
+
     } catch (error) {
+
         next(error);
+
     }
+
 };
+
 
 
 exports.updateProfile = async (req, res, next) => {
+
     try {
-        const user = await User.findByIdAndUpdate(
-            req.user.id,
-            {
-                name: req.body.name,
-                email: req.body.email
-            },
-            {
-                new: true,
-                runValidators: true
+
+
+        const allowedFields = [
+
+            "name",
+
+            "email"
+
+        ];
+
+
+        const updates = {};
+
+
+        allowedFields.forEach(
+            field => {
+
+                if (req.body[field]) {
+
+                    updates[field] =
+                        req.body[field];
+
+                }
+
             }
-        ).select("-password");
-
-        res.status(200).json({
-            success: true,
-            message: "Profile updated successfully",
-            data: user
-        });
-
-    } catch (error) {
-        next(error);
-    }
-};
-
-
-exports.changePassword = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user.id);
-
-        const isMatch = await bcrypt.compare(
-            req.body.currentPassword,
-            user.password
         );
 
-        if (!isMatch) {
-            return res.status(400).json({
-                success: false,
-                message: "Current password incorrect",
-                data: null
-            });
-        }
 
-        user.password = await bcrypt.hash(
-            req.body.newPassword,
-            10
-        );
+        const user =
+            await User.findByIdAndUpdate(
 
-        await user.save();
+                req.user.id,
+
+                updates,
+
+                {
+                    new: true,
+                    runValidators: true
+                }
+
+            )
+            .select("-password");
+
+
 
         res.status(200).json({
+
             success: true,
-            message: "Password changed successfully",
-            data: null
+
+            message:
+                "Profile updated successfully",
+
+            data:
+                user
+
         });
 
-    } catch (error) {
+
+    } catch(error) {
+
         next(error);
+
     }
+
 };
