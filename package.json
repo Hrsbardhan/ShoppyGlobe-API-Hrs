@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "shoppyglobe-api",
     "version":  "1.0.0",
     "description":  "",
@@ -24,7 +24,8 @@
                             "nodemon":  "^3.1.14"
                         },
     "scripts":  {
-                    "test":  "echo \"No tests yet\"",
+                    "test":  "echo \"No tests specified\"",
+                    "seed":  "node src/seed/seed.js",
                     "dev":  "nodemon server.js",
                     "start":  "node server.js"
                 }

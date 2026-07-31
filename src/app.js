@@ -3,6 +3,12 @@ const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 
+const productRoutes = require("./routes/product.routes");
+const authRoutes = require("./routes/auth.routes");
+const cartRoutes = require("./routes/cart.routes");
+
+const errorHandler = require("./middleware/error.middleware");
+
 const app = express();
 
 app.use(helmet());
@@ -25,10 +31,17 @@ app.get("/health", (req, res) => {
     });
 });
 
-
-const productRoutes = require("./routes/product.routes");
-
 app.use("/products", productRoutes);
+app.use("/auth", authRoutes);
+app.use("/cart", cartRoutes);
+
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
+});
+
+app.use(errorHandler);
 
 module.exports = app;
-
