@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const connectDatabase = async () => {
 
-    if (process.env.NODE_ENV === "test") {
-        return;
-    }
-
     try {
 
-        await mongoose.connect(
+        const connection = await mongoose.connect(
             process.env.MONGO_URI
         );
 
-        console.log("MongoDB Connected");
+        console.log(
+            `MongoDB Connected: ${connection.connection.host}`
+        );
+
+        return connection;
 
     } catch (error) {
 
@@ -22,7 +22,24 @@ const connectDatabase = async () => {
         );
 
         process.exit(1);
+
     }
+
 };
 
-module.exports = connectDatabase;
+
+const disconnectDatabase = async () => {
+
+    if (mongoose.connection.readyState !== 0) {
+
+        await mongoose.disconnect();
+
+    }
+
+};
+
+
+module.exports = {
+    connectDatabase,
+    disconnectDatabase
+};

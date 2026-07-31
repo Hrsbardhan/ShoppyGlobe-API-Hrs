@@ -3,5 +3,8 @@ module.exports = {
     testMatch: [
         "**/tests/**/*.test.js"
     ],
+    setupFilesAfterEnv: [
+        "./tests/setup.js"
+    ],
     verbose: true
 };
