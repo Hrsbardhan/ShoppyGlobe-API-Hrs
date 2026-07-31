@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Product = require("../models/Product");
 
 const cartItemSchema = new mongoose.Schema(
     {
@@ -7,11 +8,11 @@ const cartItemSchema = new mongoose.Schema(
             ref: "Product",
             required: true
         },
+
         quantity: {
             type: Number,
             required: true,
-            min: 1,
-            default: 1
+            min: 1
         }
     },
     {
