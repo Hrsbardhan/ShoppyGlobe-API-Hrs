@@ -1,3 +1,4 @@
+const monitoringRoutes = require('./src/routes/monitoring.routes');
 const allowedOrigins = require('./src/config/cors');
 const notFoundMiddleware = require('./src/middleware/notFound.middleware');
 const securityHeaders = require('./src/middleware/securityHeaders.middleware');
@@ -121,3 +122,5 @@ app.use('/api/inventory', inventoryRoutes);
 
 
 
+
+app.use('/api/monitoring', monitoringRoutes);
