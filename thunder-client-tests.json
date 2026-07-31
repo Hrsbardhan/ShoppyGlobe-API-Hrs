@@ -1,0 +1,85 @@
+{
+    "name": "ShoppyGlobe API Test Collection",
+    "version": "1.0",
+    "baseUrl": "http://localhost:5000",
+
+    "requests": [
+
+        {
+            "name": "Health Check",
+            "method": "GET",
+            "url": "/"
+        },
+
+        {
+            "name": "Get Products",
+            "method": "GET",
+            "url": "/api/products"
+        },
+
+        {
+            "name": "Register User",
+            "method": "POST",
+            "url": "/api/auth/register",
+            "body": {
+                "name": "Test User",
+                "email": "test@example.com",
+                "password": "password123"
+            }
+        },
+
+        {
+            "name": "Login User",
+            "method": "POST",
+            "url": "/api/auth/login",
+            "body": {
+                "email": "test@example.com",
+                "password": "password123"
+            }
+        },
+
+        {
+            "name": "Get Cart",
+            "method": "GET",
+            "url": "/api/cart",
+            "headers": {
+                "Authorization": "Bearer TOKEN"
+            }
+        },
+
+        {
+            "name": "Add Cart Item",
+            "method": "POST",
+            "url": "/api/cart",
+            "headers": {
+                "Authorization": "Bearer TOKEN"
+            },
+            "body": {
+                "productId": "PRODUCT_ID",
+                "quantity": 1
+            }
+        },
+
+        {
+            "name": "Update Cart Item",
+            "method": "PUT",
+            "url": "/api/cart/CART_ITEM_ID",
+            "headers": {
+                "Authorization": "Bearer TOKEN"
+            },
+            "body": {
+                "quantity": 2
+            }
+        },
+
+        {
+            "name": "Delete Cart Item",
+            "method": "DELETE",
+            "url": "/api/cart/CART_ITEM_ID",
+            "headers": {
+                "Authorization": "Bearer TOKEN"
+            }
+        }
+
+    ]
+}
