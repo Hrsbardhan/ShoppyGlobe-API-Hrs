@@ -1,274 +1,154 @@
-﻿const Product = require("../models/Product");
+const Product = require("../models/Product");
 
-const getAllProducts = async (req, res) => {
+
+exports.getProducts = async (req, res, next) => {
 
     try {
 
-        const page = Number(req.query.page) || 1;
+        const {
+            page = 1,
+            limit = 10,
+            search,
+            category,
+            sort
+        } = req.query;
 
-        const limit = Number(req.query.limit) || 10;
-
-        const skip = (page - 1) * limit;
 
         const filter = {};
 
-        if (req.query.category) {
 
-            filter.category = req.query.category;
+        if (search) {
 
-        }
-
-        if (req.query.keyword) {
-
-            filter.name = {
-                $regex: req.query.keyword,
+            filter.title = {
+                $regex: search,
                 $options: "i"
             };
 
         }
 
-        if (req.query.minPrice || req.query.maxPrice) {
 
-            filter.price = {};
+        if (category) {
 
-            if (req.query.minPrice)
-                filter.price.$gte = Number(req.query.minPrice);
-
-            if (req.query.maxPrice)
-                filter.price.$lte = Number(req.query.maxPrice);
+            filter.category = category.toLowerCase();
 
         }
+
 
         let query = Product.find(filter);
 
-        if (req.query.sort === "price") {
 
-            query = query.sort({ price: 1 });
+        if (sort === "price_asc") {
 
-        }
-
-        if (req.query.sort === "-price") {
-
-            query = query.sort({ price: -1 });
+            query = query.sort({
+                price: 1
+            });
 
         }
 
-        if (req.query.sort === "latest") {
 
-            query = query.sort({ createdAt: -1 });
+        if (sort === "price_desc") {
+
+            query = query.sort({
+                price: -1
+            });
 
         }
 
-        const total = await Product.countDocuments(filter);
+
+        const skip =
+            (Number(page) - 1) * Number(limit);
+
 
         const products = await query
             .skip(skip)
-            .limit(limit);
+            .limit(Number(limit));
 
-        return res.status(200).json({
 
-            success: true,
+        const total =
+            await Product.countDocuments(filter);
 
-            page,
 
-            limit,
 
-            total,
-
-            totalPages: Math.ceil(total / limit),
-
-            count: products.length,
-
-            data: products
-
-        });
-
-    } catch (error) {
-
-        return res.status(500).json({
-
-            success: false,
-
-            message: error.message
-
-        });
-
-    }
-
-};
-
-const getProductById = async (req, res) => {
-
-    try {
-
-        const product = await Product.findById(req.params.id);
-
-        if (!product) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message: "Product not found"
-
-            });
-
-        }
-
-        return res.status(200).json({
+        res.status(200).json({
 
             success: true,
 
-            data: product
+            message: "Products fetched successfully",
 
-        });
+            data: {
 
-    } catch (error) {
+                products,
 
-        return res.status(500).json({
+                pagination: {
 
-            success: false,
+                    total,
 
-            message: error.message
+                    page: Number(page),
 
-        });
+                    limit: Number(limit),
 
-    }
+                    totalPages:
+                        Math.ceil(
+                            total / Number(limit)
+                        )
 
-};
-
-const createProduct = async (req, res) => {
-
-    try {
-
-        const product = await Product.create(req.body);
-
-        return res.status(201).json({
-
-            success: true,
-
-            data: product
-
-        });
-
-    } catch (error) {
-
-        return res.status(400).json({
-
-            success: false,
-
-            message: error.message
-
-        });
-
-    }
-
-};
-
-const updateProduct = async (req, res) => {
-
-    try {
-
-        const product = await Product.findByIdAndUpdate(
-
-            req.params.id,
-
-            req.body,
-
-            {
-
-                new: true,
-
-                runValidators: true
+                }
 
             }
 
-        );
-
-        if (!product) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message: "Product not found"
-
-            });
-
-        }
-
-        return res.status(200).json({
-
-            success: true,
-
-            data: product
-
         });
 
-    } catch (error) {
 
-        return res.status(400).json({
+    } catch(error) {
 
-            success: false,
-
-            message: error.message
-
-        });
+        next(error);
 
     }
 
 };
 
-const deleteProduct = async (req, res) => {
 
-    try {
 
-        const product = await Product.findByIdAndDelete(req.params.id);
+exports.getProductById = async (req,res,next)=>{
 
-        if (!product) {
+    try{
+
+        const product =
+            await Product.findById(req.params.id);
+
+
+
+        if(!product){
 
             return res.status(404).json({
 
-                success: false,
+                success:false,
 
-                message: "Product not found"
+                message:"Product not found",
+
+                data:null
 
             });
 
         }
 
-        return res.status(200).json({
 
-            success: true,
 
-            message: "Product deleted successfully"
+        res.status(200).json({
 
-        });
+            success:true,
 
-    } catch (error) {
+            message:"Product fetched successfully",
 
-        return res.status(500).json({
-
-            success: false,
-
-            message: error.message
+            data:product
 
         });
+
+
+    }catch(error){
+
+        next(error);
 
     }
-
-};
-
-module.exports = {
-
-    getAllProducts,
-
-    getProductById,
-
-    createProduct,
-
-    updateProduct,
-
-    deleteProduct
 
 };
