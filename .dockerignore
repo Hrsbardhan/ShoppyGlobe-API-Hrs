@@ -1,0 +1,15 @@
+node_modules
+
+.env
+
+logs
+
+coverage
+
+*.log
+
+health-report.json
+
+.DS_Store
+
+Thumbs.db

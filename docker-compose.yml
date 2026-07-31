@@ -3,22 +3,17 @@ version: "3.8"
 services:
 
   api:
+
     build: .
+
     container_name: shoppyglobe-api
+
     ports:
+
       - "5000:5000"
+
     env_file:
-      - .env.production
-    depends_on:
-      - mongodb
 
-  mongodb:
-    image: mongo:latest
-    container_name: shoppyglobe-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+      - .env
 
-volumes:
-  mongo-data:
+    restart: unless-stopped
