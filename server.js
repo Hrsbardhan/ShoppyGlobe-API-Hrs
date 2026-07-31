@@ -1,3 +1,4 @@
+const generateHealthReport = require('./src/utils/healthReport');
 const validateProjectStructure = require('./src/utils/projectValidator');
 const addIndexes = require('./src/config/databaseIndexes');
 const requestLogger = require('./src/middleware/requestLogger.middleware');
@@ -36,6 +37,7 @@ const orderRoutes = require("./src/routes/order.routes");
 
 productionCheck();
 validateProjectStructure();
+generateHealthReport();
 
 connectDatabase();
 addIndexes();
@@ -97,6 +99,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
