@@ -1,3 +1,4 @@
+const userRoutes = require('./src/routes/user.routes');
 require("dotenv").config();
 
 const express = require("express");
@@ -69,3 +70,5 @@ app.listen(PORT, () => {
     );
 
 });
+
+app.use('/api/users', userRoutes);
