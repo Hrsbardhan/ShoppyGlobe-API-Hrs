@@ -1,3 +1,4 @@
+const statusRoutes = require('./src/routes/status.routes');
 const versionRoutes = require('./src/routes/version.routes');
 const monitoringRoutes = require('./src/routes/monitoring.routes');
 const allowedOrigins = require('./src/config/cors');
@@ -73,7 +74,7 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/api/v1", versionRoutes);`napp.use("/api/auth", authRoutes);
+app.use("/api/v1", versionRoutes);`napp.use("/api/status", statusRoutes);`napp.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/users", userRoutes);
@@ -125,6 +126,7 @@ app.use('/api/inventory', inventoryRoutes);
 
 
 app.use('/api/monitoring', monitoringRoutes);
+
 
 
 
