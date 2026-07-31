@@ -19,6 +19,7 @@ const categoryRoutes = require('./src/routes/category.routes');
 const reviewRoutes = require('./src/routes/review.routes');
 const healthRoutes = require('./src/routes/health.routes');
 const express = require("express");
+const { apiLimiter, authLimiter } = require('./src/middleware/rateLimiter.middleware');
 const env = require("./src/config/env");
 const helmet = require("helmet");
 const cors = require("cors");
@@ -119,6 +120,7 @@ if (require.main === module) {
 }
 
 module.exports = app;
+
 
 
 
