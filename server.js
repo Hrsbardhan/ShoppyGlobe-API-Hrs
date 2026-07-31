@@ -1,3 +1,4 @@
+const notFoundMiddleware = require('./src/middleware/notFound.middleware');
 const securityHeaders = require('./src/middleware/securityHeaders.middleware');
 const runtimeSetup = require('./src/utils/runtimeSetup');
 const optimizeModels = require('./src/config/syncIndexes');
@@ -81,6 +82,7 @@ app.use(
     swaggerUi.setup(swaggerSpec)
 );
 
+app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
@@ -104,6 +106,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
