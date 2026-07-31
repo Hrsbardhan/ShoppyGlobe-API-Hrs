@@ -1,18 +1,17 @@
 const mongoose = require("mongoose");
 
+
 const connectDatabase = async () => {
 
     try {
 
-        const connection = await mongoose.connect(
+        await mongoose.connect(
             process.env.MONGO_URI
         );
 
-        console.log(
-            `MongoDB Connected: ${connection.connection.host}`
-        );
 
-        return connection;
+        console.log("MongoDB Connected");
+
 
     } catch (error) {
 
@@ -20,6 +19,7 @@ const connectDatabase = async () => {
             "Database connection failed:",
             error.message
         );
+
 
         process.exit(1);
 
@@ -32,7 +32,7 @@ const disconnectDatabase = async () => {
 
     if (mongoose.connection.readyState !== 0) {
 
-        await mongoose.disconnect();
+        await mongoose.connection.close();
 
     }
 
@@ -40,6 +40,9 @@ const disconnectDatabase = async () => {
 
 
 module.exports = {
+
     connectDatabase,
+
     disconnectDatabase
+
 };

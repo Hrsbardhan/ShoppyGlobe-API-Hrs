@@ -22,7 +22,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 
-const connectDatabase = require("./src/config/database");
+const { connectDatabase } = require("./src/config/database");
 
 const errorMiddleware = require("./src/middleware/error.middleware");
 
@@ -124,3 +124,4 @@ app.use('/api/inventory', inventoryRoutes);
 
 
 app.use('/api/monitoring', monitoringRoutes);
+

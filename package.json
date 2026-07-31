@@ -43,6 +43,7 @@
                     "dev":  "nodemon server.js",
                     "start":  "node server.js",
                     "docker:start":  "docker compose up --build",
-                    "docker:stop":  "docker compose down"
+                    "docker:stop":  "docker compose down",
+                    "lint":  "echo Lint configuration pending"
                 }
 }
