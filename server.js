@@ -1,3 +1,4 @@
+const addIndexes = require('./src/config/databaseIndexes');
 const requestLogger = require('./src/middleware/requestLogger.middleware');
 require('./src/utils/gracefulShutdown');
 const productionCheck = require('./src/utils/productionCheck');
@@ -35,6 +36,7 @@ const orderRoutes = require("./src/routes/order.routes");
 productionCheck();
 
 connectDatabase();
+addIndexes();
 
 const app = express();
 
@@ -93,6 +95,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
