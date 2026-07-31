@@ -1,3 +1,20 @@
-node_modules
+# Node
+node_modules/
+
+# Environment
 .env
-.vscode
+.env.production
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+
+# Testing
+.nyc_output/
+
+# OS
+.DS_Store
+Thumbs.db
