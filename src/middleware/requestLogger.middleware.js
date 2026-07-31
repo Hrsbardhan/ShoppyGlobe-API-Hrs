@@ -1,27 +1,37 @@
 const logger = require("../utils/logger");
-const { v4: uuidv4 } = require("uuid");
 
 
 module.exports = (req, res, next) => {
 
-    req.requestId = uuidv4();
+
+    const start =
+        Date.now();
 
 
-    res.setHeader(
-        "X-Request-ID",
-        req.requestId
+    res.on(
+        "finish",
+        () => {
+
+
+            logger.info({
+
+                method:
+                    req.method,
+
+                url:
+                    req.originalUrl,
+
+                status:
+                    res.statusCode,
+
+                responseTime:
+                    `${Date.now() - start}ms`
+
+            });
+
+
+        }
     );
-
-
-    logger.info({
-
-        requestId: req.requestId,
-
-        method: req.method,
-
-        url: req.originalUrl
-
-    });
 
 
     next();

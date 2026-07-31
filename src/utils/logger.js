@@ -1,49 +1,63 @@
-const winston = require("winston");
+const fs = require("fs");
+
+const path = require("path");
 
 
-const logger = winston.createLogger({
-
-    level: "info",
-
-    format: winston.format.combine(
-
-        winston.format.timestamp(),
-
-        winston.format.json()
-
-    ),
+const logDirectory =
+    path.join(__dirname, "../../logs");
 
 
-    transports: [
+if (!fs.existsSync(logDirectory)) {
 
-        new winston.transports.File({
-
-            filename: "logs/error.log",
-
-            level: "error"
-
-        }),
-
-        new winston.transports.File({
-
-            filename: "logs/app.log"
-
-        })
-
-    ]
-
-});
-
-
-if (process.env.NODE_ENV !== "production") {
-
-    logger.add(
-
-        new winston.transports.Console()
-
+    fs.mkdirSync(
+        logDirectory,
+        {
+            recursive: true
+        }
     );
 
 }
+
+
+const logFile =
+    path.join(
+        logDirectory,
+        "application.log"
+    );
+
+
+const logger = {
+
+
+    info: (message) => {
+
+        const entry =
+            `[INFO] ${new Date().toISOString()} ${JSON.stringify(message)}\n`;
+
+
+        fs.appendFileSync(
+            logFile,
+            entry
+        );
+
+    },
+
+
+    error: (message) => {
+
+        const entry =
+            `[ERROR] ${new Date().toISOString()} ${JSON.stringify(message)}\n`;
+
+
+        fs.appendFileSync(
+            logFile,
+            entry
+        );
+
+    }
+
+
+};
 
 
 module.exports = logger;
