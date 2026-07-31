@@ -1,3 +1,4 @@
+const authLimiter = require('../middleware/authRateLimit.middleware');
 const {
     registerValidator,
     loginValidator,
@@ -32,3 +33,4 @@ router.post(
 
 
 module.exports = router;
+
