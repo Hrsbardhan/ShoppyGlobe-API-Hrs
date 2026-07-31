@@ -1,3 +1,4 @@
+const requestLogger = require('./src/middleware/requestLogger.middleware');
 require('./src/utils/gracefulShutdown');
 const productionCheck = require('./src/utils/productionCheck');
 const adminOrderRoutes = require('./src/routes/admin.order.routes');
@@ -41,6 +42,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(requestLogger);
 
 app.use(rateLimiter);
 app.use(sanitizeMiddleware);
@@ -91,6 +93,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
