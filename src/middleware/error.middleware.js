@@ -10,13 +10,11 @@ const errorMiddleware = (err, req, res, next) => {
 
         message:
             err.message ||
-            "Internal server error",
+            "Internal Server Error",
 
         data: null
 
     });
-
 };
-
 
 module.exports = errorMiddleware;
