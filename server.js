@@ -1,3 +1,4 @@
+const securityHeaders = require('./src/middleware/securityHeaders.middleware');
 const runtimeSetup = require('./src/utils/runtimeSetup');
 const optimizeModels = require('./src/config/syncIndexes');
 const generateHealthReport = require('./src/utils/healthReport');
@@ -48,7 +49,7 @@ optimizeModels();
 
 const app = express();
 
-app.use(helmet());
+app.use(securityHeaders);
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -103,6 +104,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
