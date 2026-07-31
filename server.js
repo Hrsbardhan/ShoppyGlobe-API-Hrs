@@ -1,3 +1,4 @@
+const orderRoutes = require('./src/routes/order.routes');
 const userRoutes = require('./src/routes/user.routes');
 require("dotenv").config();
 
@@ -72,3 +73,5 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/users', userRoutes);
+
+app.use('/api/orders', orderRoutes);
