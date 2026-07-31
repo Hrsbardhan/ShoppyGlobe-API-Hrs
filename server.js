@@ -1,3 +1,5 @@
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./src/config/swagger');
 const rateLimiter = require('./src/middleware/rateLimit.middleware');
 const sanitizeMiddleware = require('./src/middleware/sanitize.middleware');
 const hppMiddleware = require('./src/middleware/hpp.middleware');
@@ -79,3 +81,5 @@ app.use('/api/users', userRoutes);
 
 app.use('/api/orders', orderRoutes);
 
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
