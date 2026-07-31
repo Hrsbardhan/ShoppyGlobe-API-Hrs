@@ -1,3 +1,4 @@
+const allowedOrigins = require('./src/config/cors');
 const notFoundMiddleware = require('./src/middleware/notFound.middleware');
 const securityHeaders = require('./src/middleware/securityHeaders.middleware');
 const runtimeSetup = require('./src/utils/runtimeSetup');
@@ -51,7 +52,7 @@ optimizeModels();
 const app = express();
 
 app.use(securityHeaders);
-app.use(cors());
+app.use(cors({ origin: allowedOrigins() }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(requestLogger);
@@ -106,6 +107,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/admin', adminOrderRoutes);
 
 app.use('/api/inventory', inventoryRoutes);
+
 
 
 
