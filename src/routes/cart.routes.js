@@ -3,6 +3,12 @@ const express = require("express");
 const authMiddleware = require("../middleware/auth.middleware");
 
 const {
+    cartValidator,
+    updateCartValidator
+} = require("../middleware/validation.middleware");
+
+
+const {
     getCart,
     addToCart,
     updateCartItem,
@@ -24,12 +30,14 @@ router.get(
 
 router.post(
     "/",
+    cartValidator,
     addToCart
 );
 
 
 router.put(
     "/:id",
+    updateCartValidator,
     updateCartItem
 );
 
