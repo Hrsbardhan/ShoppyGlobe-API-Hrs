@@ -1,3 +1,4 @@
+const healthRoutes = require('./src/routes/health.routes');
 const express = require("express");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -36,6 +37,8 @@ app.use(rateLimiter);
 app.use(sanitizeMiddleware);
 app.use(hppMiddleware);
 
+app.use("/api/health", healthRoutes);
+
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
@@ -69,3 +72,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+

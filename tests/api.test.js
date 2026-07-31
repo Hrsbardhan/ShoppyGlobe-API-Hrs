@@ -4,10 +4,10 @@ const app = require("../server");
 
 describe("Health API", () => {
 
-    test("GET / should return success", async () => {
+    test("GET /api/health", async () => {
 
         const response = await request(app)
-            .get("/");
+            .get("/api/health");
 
         expect(response.statusCode)
             .toBe(200);
