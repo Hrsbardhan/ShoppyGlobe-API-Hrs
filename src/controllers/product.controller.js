@@ -1,163 +1,102 @@
-const asyncHandler = require("../utils/asyncHandler");
 const Product = require("../models/Product");
-const validateObjectId = require("../utils/validateObjectId");
+const asyncHandler = require("../utils/asyncHandler");
 
 
-exports.getProducts = asyncHandler(async (req, res) => {
-
-    const {
-        page = 1,
-        limit = 10,
-        search,
-        category,
-        sort
-    } = req.query;
+exports.getProducts = asyncHandler(
+    async (req, res) => {
 
 
-    const filter = {};
+        const {
+
+            page = 1,
+
+            limit = 10,
+
+            search,
+
+            category,
+
+            sort
+
+        } = req.query;
 
 
-    if (search) {
 
-        filter.$or = [
-
-            {
-                title: {
-                    $regex: search,
-                    $options: "i"
-                }
-            },
-
-            {
-                description: {
-                    $regex: search,
-                    $options: "i"
-                }
-            }
-
-        ];
-    }
+        const filter = {};
 
 
-    if (category) {
 
-        filter.category = category.toLowerCase();
+        if (search) {
 
-    }
+            filter.$text = {
 
+                $search: search
 
-    let query = Product.find(filter);
-
-
-    if (sort === "price_asc") {
-
-        query = query.sort({
-            price: 1
-        });
-
-    }
-
-
-    if (sort === "price_desc") {
-
-        query = query.sort({
-            price: -1
-        });
-
-    }
-
-
-    const pageNumber = Number(page);
-    const limitNumber = Number(limit);
-
-
-    const products = await query
-        .skip(
-            (pageNumber - 1) * limitNumber
-        )
-        .limit(limitNumber);
-
-
-    const total =
-        await Product.countDocuments(filter);
-
-
-    res.status(200).json({
-
-        success: true,
-
-        message: "Products fetched successfully",
-
-        data: {
-
-            products,
-
-            pagination: {
-
-                total,
-
-                page: pageNumber,
-
-                limit: limitNumber,
-
-                totalPages:
-                    Math.ceil(
-                        total / limitNumber
-                    )
-
-            }
+            };
 
         }
 
-    });
-
-});
 
 
-exports.getProductById = asyncHandler(async (req, res) => {
+        if (category) {
 
-    if (!validateObjectId(req.params.id)) {
+            filter.category =
+                category.toLowerCase();
 
-        return res.status(400).json({
+        }
 
-            success: false,
 
-            message: "Invalid product id",
 
-            data: null
+        let sortOption = {};
+
+
+
+        if (sort === "price_asc") {
+
+            sortOption.price = 1;
+
+        }
+
+
+        if (sort === "price_desc") {
+
+            sortOption.price = -1;
+
+        }
+
+
+
+        const products =
+            await Product.paginate(
+
+                filter,
+
+                {
+
+                    page: Number(page),
+
+                    limit: Number(limit),
+
+                    sort: sortOption
+
+                }
+
+            );
+
+
+
+        res.status(200).json({
+
+            success: true,
+
+            message:
+                "Products fetched successfully",
+
+            data: products
 
         });
 
-    }
-
-
-    const product =
-        await Product.findById(req.params.id);
-
-
-    if (!product) {
-
-        return res.status(404).json({
-
-            success: false,
-
-            message: "Product not found",
-
-            data: null
-
-        });
 
     }
 
-
-    res.status(200).json({
-
-        success: true,
-
-        message: "Product fetched successfully",
-
-        data: product
-
-    });
-
-});
+);
