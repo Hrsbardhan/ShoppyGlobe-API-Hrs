@@ -1,3 +1,4 @@
+const inventoryRoutes = require('./src/routes/inventory.routes');
 const adminRoutes = require('./src/routes/admin.routes');
 const categoryRoutes = require('./src/routes/category.routes');
 const reviewRoutes = require('./src/routes/review.routes');
@@ -82,3 +83,5 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/categories', categoryRoutes);
 
 app.use('/api/admin', adminRoutes);
+
+app.use('/api/inventory', inventoryRoutes);
