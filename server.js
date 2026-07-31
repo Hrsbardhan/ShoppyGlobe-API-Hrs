@@ -1,3 +1,6 @@
+const rateLimiter = require('./src/middleware/rateLimit.middleware');
+const sanitizeMiddleware = require('./src/middleware/sanitize.middleware');
+const hppMiddleware = require('./src/middleware/hpp.middleware');
 const orderRoutes = require('./src/routes/order.routes');
 const userRoutes = require('./src/routes/user.routes');
 require("dotenv").config();
@@ -75,3 +78,4 @@ app.listen(PORT, () => {
 app.use('/api/users', userRoutes);
 
 app.use('/api/orders', orderRoutes);
+
