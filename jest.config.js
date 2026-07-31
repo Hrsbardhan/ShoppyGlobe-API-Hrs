@@ -3,8 +3,9 @@ module.exports = {
     testMatch: [
         "**/tests/**/*.test.js"
     ],
-    setupFilesAfterEnv: [
+    setupFilesAfterEnv: [ "./tests/mongo.setup.js",
         "./tests/setup.js"
     ],
     verbose: true
 };
+
